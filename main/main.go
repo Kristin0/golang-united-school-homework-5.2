@@ -6,11 +6,12 @@ func main() {
 	c := cache.NewCache()
 	fmt.Println(c)
 	c.Put("key1", "value1")
-	c.Put("key1","value2")
 	c.Put("key2","value2")
+	c.Put("key3","value2")
+	c.Put("key4","value3")
 	fmt.Println(c.Keys())
-	fmt.Println(c.Get("key4"))
-	//c.PutTill("key3", "value3", 1)
+	fmt.Println(c.Get("key2"))
+	
 
 	// b := cache.NewCache()
 	// b.Put("key1", "value2")
