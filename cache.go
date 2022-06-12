@@ -16,39 +16,44 @@ func NewCache() Cache {
 	return Cache{m: make(map[string]myType), b: false}
 }
 
-func (c Cache) clear() Cache {
-	for _, key := range c.Keys() {
-		if time.Now().After(c.m[key].t) {
-			delete(c.m, key)
-		}
-	}
-	return c
-}
+// func (c Cache) clear() Cache {
+// 	for _, key := range c.Keys() {
+// 		if time.Now().After(c.m[key].t) {
+// 			delete(c.m, key)
+// 		}
+// 	}
+// 	return c
+// }
 
 func (c Cache) Get(key string) (string, bool) {
-	c = c.clear()
+	if time.Now().After(c.m[key].t){
+		delete(c.m, key)
+		return "", false
+	}
 	if _, ok := c.m[key]; ok   {
 		return c.m[key].v, c.b
 	}else {
-		return c.m[key].v, false
+		return "", false
 	}
 	
 }
 
 func (c *Cache) Put(key, value string) {
-	time := time.Now()
 	if _, ok := c.m[key]; ok {
-		c.m[key] = myType{v: value, t: time}
+		c.m[key] = myType{v: value, t: time.Unix(1<<63-62135596801, 999999999)}
 	}else{
-		c.m[key] = myType{v: value, t: time}
+		c.m[key] = myType{v: value, t: time.Unix(1<<63-62135596801, 999999999)}
 		c.b = true
 	}
 }
 
 func (c Cache) Keys() []string {
 	var s[]string
-	for k, _ := range c.m {
-		s = append(s, k)
+	for key, _ := range c.m {
+		if time.Now().After(c.m[key].t){
+			delete(c.m, key)
+		}
+		s = append(s, key)
 	}
 	return s
 }
