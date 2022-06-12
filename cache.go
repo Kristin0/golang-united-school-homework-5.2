@@ -13,7 +13,7 @@ type Cache struct {
 }
 
 func NewCache() Cache {
-	return Cache{}
+	return Cache{m: make(map[string]myType), b: false}
 }
 
 func (c Cache) Get(key string) (string, bool) {
@@ -21,11 +21,13 @@ func (c Cache) Get(key string) (string, bool) {
 }
 
 func (c *Cache) Put(key, value string) {
-	if thisKey, ok := c.m[key]; ok {   // https://webapplicationconsultant.com/go-lang/cannot-assign-to-struct-field-in-map/
-		thisKey.v = value
-		c.m[key] = thisKey 
+	time := time.Now()
+	if _, ok := c.m[key]; ok {
+		c.m[key] = myType{v: value, t: time}
+	}else{
+		c.m[key] = myType{v: value, t: time}
+		c.b = true
 	}
-	
 }
 
 func (c Cache) Keys() []string {
