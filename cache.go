@@ -16,14 +16,6 @@ func NewCache() Cache {
 	return Cache{m: make(map[string]myType), b: false}
 }
 
-// func (c Cache) clear() Cache {
-// 	for _, key := range c.Keys() {
-// 		if time.Now().After(c.m[key].t) {
-// 			delete(c.m, key)
-// 		}
-// 	}
-// 	return c
-// }
 
 func (c Cache) Get(key string) (string, bool) {
 	if time.Now().After(c.m[key].t){
@@ -66,6 +58,4 @@ func (c *Cache) PutTill(key, value string, deadline time.Time) {
 		c.b = true
 	}
 
-
-	
 }
