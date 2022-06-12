@@ -7,7 +7,10 @@ func main() {
 	fmt.Println(c)
 	c.Put("key1", "value1")
 	c.Put("key1","value2")
-	fmt.Println(c.Get("key1"))
+	c.Put("key2","value2")
+	//fmt.Println(c.Keys())
+	fmt.Println(c.Get("key2"))
+
 
 	// b := cache.NewCache()
 	// b.Put("key1", "value2")
