@@ -17,7 +17,12 @@ func NewCache() Cache {
 }
 
 func (c Cache) Get(key string) (string, bool) {
-	return c.m[key].v, c.b
+	if _, ok := c.m[key]; ok {
+		return c.m[key].v, c.b
+	}else {
+		return c.m[key].v, false
+	}
+	
 }
 
 func (c *Cache) Put(key, value string) {
