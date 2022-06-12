@@ -16,8 +16,18 @@ func NewCache() Cache {
 	return Cache{m: make(map[string]myType), b: false}
 }
 
+func (c Cache) clear() Cache {
+	for _, key := range c.Keys() {
+		if time.Now().After(c.m[key].t) {
+			delete(c.m, key)
+		}
+	}
+	return c
+}
+
 func (c Cache) Get(key string) (string, bool) {
-	if _, ok := c.m[key]; ok {
+	c = c.clear()
+	if _, ok := c.m[key]; ok   {
 		return c.m[key].v, c.b
 	}else {
 		return c.m[key].v, false
@@ -44,13 +54,11 @@ func (c Cache) Keys() []string {
 }
 
 func (c *Cache) PutTill(key, value string, deadline time.Time) {
-	if thisKey, ok := c.m[key]; ok {   // https://webapplicationconsultant.com/go-lang/cannot-assign-to-struct-field-in-map/
-		thisKey.v = value
-		c.m[key] = thisKey 
-	}
-	if thisTime, ok := c.m[key]; ok {   // https://webapplicationconsultant.com/go-lang/cannot-assign-to-struct-field-in-map/
-		thisTime.t = deadline
-		c.m[key] = thisTime 
+	if _, ok := c.m[key]; ok {
+		c.m[key] = myType{v: value, t: deadline}
+	}else{
+		c.m[key] = myType{v: value, t: deadline}
+		c.b = true
 	}
 
 
